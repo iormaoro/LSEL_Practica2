@@ -33,8 +33,10 @@ if not args.get("video", False):
 else:
 	camera = cv2.VideoCapture(args["video"])
 
+
+
 # keep looping
-while True:
+while True:	
 	# grab the current frame
 	(grabbed, frame) = camera.read()
 
@@ -49,6 +51,15 @@ while True:
 	# blurred = cv2.GaussianBlur(frame, (11, 11), 0)
 	hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
 
+	# Grid
+	cv2.line(frame,(0,112),(600,112),(255,255,255), 2)
+	cv2.line(frame,(0,224),(600,224),(255,255,255), 2)
+	cv2.line(frame,(200,0),(200,336),(255,255,255), 2)
+	cv2.line(frame,(400,0),(400,336),(255,255,255), 2)
+
+
+
+
 	# construct a mask for the color "green", then perform
 	# a series of dilations and erosions to remove any small
 	# blobs left in the mask
@@ -62,6 +73,7 @@ while True:
 		cv2.CHAIN_APPROX_SIMPLE)[-2]
 	center = None
 
+	
 	# only proceed if at least one contour was found
 	if len(cnts) > 0:
 		# find the largest contour in the mask, then use
@@ -77,8 +89,7 @@ while True:
 			# draw the circle and centroid on the frame,
 			# then update the list of tracked points
 			if ((center[0]> 200 and center[0]<400) and (center[1]>112 and center[1]<224) ):
-				cv2.circle(frame, (int(x), int(y)), int(radius),
-					(0, 0, 255), 10)
+				cv2.circle(frame, (int(x), int(y)), int(radius),(0, 0, 255), 5)
 				cv2.circle(frame, center, 5, (0, 0, 255), -1)
 			else:
 				cv2.circle(frame, (int(x), int(y)), int(radius),(255,0,255), 2)
@@ -98,7 +109,11 @@ while True:
 		# otherwise, compute the thickness of the line and
 		# draw the connecting lines
 		thickness = int(np.sqrt(args["buffer"] / float(i + 1)) * 2.5)
-		cv2.line(frame, pts[i - 1], pts[i], (0, 0, 255), thickness)
+		if (center):
+			if((center[0]> 200 and center[0]<400) and (center[1]>112 and center[1]<224)):
+				cv2.line(frame, pts[i - 1], pts[i], (0, 255, 0), thickness)
+			else:
+				cv2.line(frame, pts[i - 1], pts[i], (255, 0, 0), thickness)
 
 	# show the frame to our screen
 	cv2.imshow("Frame", frame)

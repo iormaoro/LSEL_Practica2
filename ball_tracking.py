@@ -21,7 +21,7 @@ args = vars(ap.parse_args())
 # ball in the HSV color space, then initialize the
 # list of tracked points
 greenLower = (29, 86, 6)
-greenUpper = (64, 255, 255)
+greenUpper = (60, 255, 255)
 pts = deque(maxlen=args["buffer"])
 
 # if a video path was not supplied, grab the reference
@@ -52,10 +52,10 @@ while True:
 	hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
 
 	# Grid
-	cv2.line(frame,(0,112),(600,112),(255,255,255), 2)
-	cv2.line(frame,(0,224),(600,224),(255,255,255), 2)
-	cv2.line(frame,(200,0),(200,336),(255,255,255), 2)
-	cv2.line(frame,(400,0),(400,336),(255,255,255), 2)
+	cv2.line(frame,(0,150),(600,150),(255,0,0), 2)
+	cv2.line(frame,(0,300),(600,300),(255,0,0), 2)
+	cv2.line(frame,(200,0),(200,450),(255,0,0), 2)
+	cv2.line(frame,(400,0),(400,450),(255,0,0), 2)
 
 
 
@@ -88,7 +88,7 @@ while True:
 		if radius > 10:
 			# draw the circle and centroid on the frame,
 			# then update the list of tracked points
-			if ((center[0]> 200 and center[0]<400) and (center[1]>112 and center[1]<224) ):
+			if ((center[0]> 200 and center[0]<400) and (center[1]>150 and center[1]<300) ):
 				cv2.circle(frame, (int(x), int(y)), int(radius),(0, 0, 255), 5)
 				cv2.circle(frame, center, 5, (0, 0, 255), -1)
 			else:
@@ -110,10 +110,10 @@ while True:
 		# draw the connecting lines
 		thickness = int(np.sqrt(args["buffer"] / float(i + 1)) * 2.5)
 		if (center):
-			if((center[0]> 200 and center[0]<400) and (center[1]>112 and center[1]<224)):
-				cv2.line(frame, pts[i - 1], pts[i], (0, 255, 0), thickness)
+			if((center[0]> 200 and center[0]<400) and (center[1]>150 and center[1]<300)):
+				cv2.line(frame, pts[i - 1], pts[i], (0, 0, 255), thickness)
 			else:
-				cv2.line(frame, pts[i - 1], pts[i], (255, 0, 0), thickness)
+				cv2.line(frame, pts[i - 1], pts[i], (0, 255, 0), thickness)
 
 	# show the frame to our screen
 	cv2.imshow("Frame", frame)
